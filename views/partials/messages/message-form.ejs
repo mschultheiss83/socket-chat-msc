@@ -1,0 +1,37 @@
+<form class="form" id="message-form" action="/">
+    <div class="row history">
+        <div class="col">
+            <h3>Rooms</h3>
+            <hr>
+            <ul id="rooms" class="list-group"></ul>
+            <div class="rooms input-group mb-3">
+                <input type="text" class="form-control" id="r" autocomplete="off"
+                       placeholder="new Room">
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Send</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3>History</h3>
+            <hr>
+            <ul id="messages" class="list-group"></ul>
+            <div class="message input-group mb-3">
+                <input type="text" class="form-control" id="m" autocomplete="off"
+                       placeholder="Message">
+
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Send</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h3>Clients</h3>
+            <hr>
+            <ul id="clients" class="list-group">
+                <li id="me" class="list-group-item">Me</li>
+            </ul>
+        </div>
+    </div>
+</form>

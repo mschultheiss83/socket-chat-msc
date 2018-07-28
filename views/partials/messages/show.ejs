@@ -1,0 +1,5 @@
+<ul id="messages" class="list-group">
+    <% messages.forEach(function(message){ %>
+    <%- include('partials/messages/message', {message: message}) %>
+    <% }); %>
+</ul>

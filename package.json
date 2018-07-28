@@ -1,0 +1,24 @@
+{
+  "name": "socket-chat-msc",
+  "version": "0.0.1",
+  "description": "socket.io chat app for mschultheiss.net",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.0",
+    "octicons": "^8.0.0",
+    "socket.io": "^1.7.4",
+    "socket.io-client": "^2.1.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "startLive": "pm2 start index.js -i max -n socket-chat-msc",
+    "stopLive": "pm2 delete socket-chat-msc",
+    "killLive": "pm2 kill",
+    "stopKillLive": "npm run stopLive && npm run killLive"
+  }
+}
