@@ -33,7 +33,7 @@ const DashManager = function (config) {
   if (config.id) {
     _data.id = config.id;
   }
-  const builder = function () {
+  const builder = function (socket) {
     const buildRoomsListItem = function (ul, name) {
       name = name || 'Lobby';
       var button = $('<a>').addClass('btn').addClass('btn-primary').addClass('octicon-chevron-right').addClass('room-' + name).attr('href', '#').attr('role', 'button').append('go to');
@@ -55,12 +55,14 @@ const DashManager = function (config) {
         li.addClass('list-group-item-primary');
       }
       if (name != socketId) {
-        var button = $('<a>').addClass('btn').addClass('btn-primary').addClass('octicon-chevron-right').addClass('room-' + name).attr('href', '#').attr('role', 'button').append('send');
+        var button = $('<a>').addClass('btn').addClass('btn-primary').addClass('octicon-chevron-right').addClass('room-' + name)
+          .attr('href', '#').attr('data-client-id', name).attr('role', 'button').append('send');
         button.click(function () {
           var message = $('#m');
           if (message.val()) {
-            socket.emit('sendDataToId', name, message.val(), socketId);
+            socket.emit('sendDataToId', name, socketId, message.val(), Date.now());
             message.val('');
+            $('#m').focus();
           }
         });
         li.append(button);
@@ -105,10 +107,22 @@ const DashManager = function (config) {
         $('#messages').append(li);
         window.scrollTo(0, document.body.scrollHeight);
       },
+      privateMessage: function (from, message, sendTime) {
+        //console.log(arguments);
+        var time = new Date(sendTime);
+        var text = socketId != from ? from + ': ' : 'me: ';
+        text += JSON.stringify(message) + ' (' + time.toLocaleDateString() + ' ' + time.toLocaleTimeString() + ')';
+        var li = $('<li>').text(text);
+        li.addClass('list-group-item');
+        li.attr('data-message-time', sendTime);
+        li.attr('data-message-from', from);
+        $('#messages').append(li);
+        window.scrollTo(0, document.body.scrollHeight);
+      },
       buildRoomsListItem: buildRoomsListItem,
       buildClientListItem: buildClientListItem
     }
-  }();
+  }(config.socket);
   const room = function (roomName) {
     if (!roomName) {
       return _data.currentRoom;
@@ -131,7 +145,7 @@ const DashManager = function (config) {
       var lis = $('#messages').find('li');
       if (lis && lis.length > 0) {
         var first = lis.first();
-        var dataTime = first.attr('data-time');
+        var dataTime = first.attr('data-message-time');
         var time = Date.now() - dataTime;
         if (lis.length > 5 && time > removeTime) {
           first.fadeOutAndRemove('slow');
@@ -156,11 +170,13 @@ const DashManager = function (config) {
         if (m) {
           _data.socket.emit('chat message', newMessage(n, socket, {data: m}));
           inputM.val('');
+          $('#m').focus();
         }
 
         if (r) {
           _data.socket.emit('joinRoom', r);
           inputR.val('');
+          $('#m').focus();
         }
 
         return false;
@@ -190,4 +206,3 @@ const DashManager = function (config) {
     data: _data,
   }
 };
-
