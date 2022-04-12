@@ -15,7 +15,7 @@
     "socket.io-client": "^2.1.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "startLive": "pm2 start index.js -i max -n socket-chat-msc",
     "stopLive": "pm2 delete socket-chat-msc",
     "killLive": "pm2 kill",
